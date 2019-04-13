@@ -17,7 +17,7 @@ var connection = mysql.createConnection({
 });
 
 // connect to the mysql server and sql database
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) throw err;
   // run the start function after the connection is made to prompt the user
   start();
@@ -32,64 +32,78 @@ function start() {
   inquirer
     .prompt([
       {
-      name: "selectedid",
-      type: "input",
-      message: "What is the ID of the product you would like to buy?" 
-    },
+        name: "selectedid",
+        type: "input",
+        message: "What is the ID of the product you would like to buy?"
+      },
 
-    {
-      name: "selectedquantity",
-      type: "input",
-      message: "What is the purchase quantity of this item?"
-    }
-  ])
-    .then(function(answers) {
-     
+      {
+        name: "selectedquantity",
+        type: "input",
+        message: "What is the purchase quantity of this item?"
+      }
+    ])
+    .then(function (answers) {
+
       console.log(JSON.stringify(answers));
-      console.log("quantity: ",answers.selectedquantity);
-      console.log("ID: ",answers.selectedid);
+      console.log("quantity: ", answers.selectedquantity);
+      console.log("ID: ", answers.selectedid);
       var id = answers.selectedid;
       var quantity = answers.selectedquantity;
       //update database
-      update(id,quantity);
-     }
-      
-);
-
-
-function update(id,quantity){
-  console.log("the update id is: ",id);
-  console.log("the update quantity is: ",quantity);
-
-  connection.query("SELECT stock_quantity FROM products WHERE item_id = ?",id,
-  function(err,rows){
-    if(err){
-      console.log(err);
-      return;
+      update(id, quantity);
     }
-    rows.forEach(function(result){
 
-      var db_quantity = result.stock_quantity;
-      console.log("The quantity in the database is ",db_quantity);
+    );
 
-      if (db_quantity<quantity){
-        console.log("There is not enough stock to fill this order.");
-        return;
+
+  function update(id, quantity) {
+    console.log("the update id is: ", id);
+    console.log("the update quantity is: ", quantity);
+
+    connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", id,
+      function (err, rows) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        rows.forEach(function (result) {
+
+          var db_quantity = result.stock_quantity;
+          console.log("The quantity in the database is ", db_quantity);
+
+          if (db_quantity < quantity) {
+            console.log("There is not enough stock to fill this order.");
+            return;
+          }
+
+          if (db_quantity >= quantity) {
+            console.log("we will update db quantity.");
+
+            var newQuantity = db_quantity - quantity;
+            console.log("The new db quantity is ", newQuantity);
+
+            connection.query("UPDATE products" +
+              " SET stock_quantity = " + newQuantity +
+              " WHERE item_id = ?", id,
+
+              function (err, rows) {
+                if (err) {
+                  console.log(err);
+                  return;
+                }
+
+              }
+
+            )
+              console.log("Database updated...");
+          }
+        }
+          // connection.end();
+
+        )}
+    )}
       }
-      
-      if(db_quantity>=quantity){
-        console.log("we will update db quantity.")
-      }
-     
-    })
-
-    
-
-  });
-}
-// connection.end();
-
-    }
 
 // // function to handle posting new items up for auction
 // function postAuction() {
