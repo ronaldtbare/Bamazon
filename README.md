@@ -11,8 +11,8 @@ Node, Inquirer, MySQL
 
 Screenshots:
 
-![Choices](console1.PNG);
-![Receipt](console2.PNG);
-![Database](database1.PNG);
-![Out-of-stock](console-quanttityerror.PNG);
+![Choices](/images/console1.PNG);
+![Receipt](/images/console2.PNG);
+![Database](/images/database1.PNG);
+![Out-of-stock](/images/console-quanttityerror.PNG);
 
