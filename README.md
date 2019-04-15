@@ -1,5 +1,5 @@
 # Bamazon
-Node &amp; MySQL storefront
+A Node and MySQL storefront
 by Travis Bare
 
 
@@ -14,5 +14,5 @@ Screenshots:
 ![Choices](/images/console1.PNG);
 ![Receipt](/images/console2.PNG);
 ![Database](/images/database1.PNG);
-![Out-of-stock](/images/console-quanttityerror.PNG);
+![Out-of-stock](/images/console-quantityerror.PNG);
 
